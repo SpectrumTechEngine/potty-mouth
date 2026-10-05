@@ -1,0 +1,10 @@
+{
+  "appId": "com.thespectrumtechengine.pottymouth",
+  "appName": "Potty Mouth",
+  "webDir": "www",
+  "backgroundColor": "#FFF4E2",
+  "server": {
+    "url": "https://thespectrumtechengine.com/potty-mouth/",
+    "errorPath": "index.html"
+  }
+}
