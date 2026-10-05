@@ -1,0 +1,780 @@
+<!doctype html>
+<html lang="en-IE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>PottyMouthPocket</title>
+<meta name="description" content="The swear jar with a difference. Catch your friends swearing, they accept or dispute, and the cleanest mouth collects the jar.">
+<meta name="theme-color" content="#FFF4E2" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1C1714" media="(prefers-color-scheme: dark)">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-title" content="Potty Mouth">
+<!-- The picture and words WhatsApp shows under a link -->
+<meta property="og:title" content="PottyMouthPocket: the swear jar with a difference">
+<meta property="og:description" content="Catch them swearing, they accept or dispute, and the cleanest mouth collects the jar.">
+<meta property="og:url" content="https://thespectrumtechengine.com/potty-mouth/">
+<meta property="og:image" content="https://thespectrumtechengine.com/potty-mouth/share.jpg">
+<meta property="og:image:secure_url" content="https://thespectrumtechengine.com/potty-mouth/share.jpg">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:type" content="website">
+<!-- Usage numbers and owner tools, shared by every Spectrum Tech Engine app -->
+<script src="https://thespectrumtechengine.com/ste-owner.js" data-app="potty-mouth" defer></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #FFF4E2; --card: #FFFFFF; --ink: #2B211C; --muted: #7A6A60; --line: #EEDFC9;
+  --accent: #E8513A; --accent-ink: #FFFFFF; --accent-soft: #FDE3DC;
+  --mint: #2E9E7A; --mint-soft: #D9F2E8; --gold: #F2B33D; --gold-soft: #FFF0CC;
+  --jar: #CFE7F3; --shadow: 0 10px 30px -18px rgba(60,30,10,.45);
+  --head: "Fredoka", "Nunito", system-ui, sans-serif; --body: "Nunito", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #1C1714; --card: #2A221D; --ink: #F6ECE3; --muted: #BFAE9F; --line: #3D322B;
+  --accent: #FF6B52; --accent-soft: #4A2A22; --mint: #4CC9A0; --mint-soft: #1F3A31; --gold: #F5C25A; --gold-soft: #3F3420; --jar: #2C4350;
+  --shadow: 0 10px 30px -18px rgba(0,0,0,.8);
+} }
+:root[data-theme="dark"] {
+  --bg: #1C1714; --card: #2A221D; --ink: #F6ECE3; --muted: #BFAE9F; --line: #3D322B;
+  --accent: #FF6B52; --accent-soft: #4A2A22; --mint: #4CC9A0; --mint-soft: #1F3A31; --gold: #F5C25A; --gold-soft: #3F3420; --jar: #2C4350;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.5 var(--body); -webkit-tap-highlight-color: transparent; }
+body { min-height: 100dvh; }
+.wrap { width: min(100%, 34rem); margin: 0 auto; padding: calc(14px + env(safe-area-inset-top, 0px)) 16px calc(96px + env(safe-area-inset-bottom, 0px)); }
+h1, h2, h3, .head { font-family: var(--head); font-weight: 700; letter-spacing: .2px; margin: 0; }
+h1 { font-size: 1.9rem; line-height: 1.1; }
+h2 { font-size: 1.35rem; }
+h3 { font-size: 1.05rem; }
+p { margin: .4rem 0; }
+.muted { color: var(--muted); }
+.tiny { font-size: .82rem; }
+.card { background: var(--card); border: 1.5px solid var(--line); border-radius: 20px; padding: 16px; margin: 12px 0; box-shadow: var(--shadow); }
+.row { display: flex; gap: 10px; align-items: center; }
+.row.wrap-row { flex-wrap: wrap; }
+.grow { flex: 1; min-width: 0; }
+.btn { font: 700 1rem var(--body); border: 2px solid transparent; border-radius: 999px; padding: .75rem 1.2rem; min-height: 48px; cursor: pointer; background: var(--line); color: var(--ink); display: inline-flex; align-items: center; justify-content: center; gap: .45rem; text-decoration: none; }
+.btn.primary { background: var(--accent); color: var(--accent-ink); }
+.btn.mint { background: var(--mint); color: #fff; }
+.btn.ghost { background: transparent; border-color: var(--line); }
+.btn.wide { width: 100%; }
+.btn.small { min-height: 38px; padding: .4rem .9rem; font-size: .9rem; }
+.btn:disabled { opacity: .5; cursor: default; }
+.field { display: block; margin: 12px 0; }
+.field > span { display: block; font-weight: 800; font-size: .9rem; margin-bottom: 5px; }
+.inp, select.inp, textarea.inp { width: 100%; font: 600 1rem var(--body); color: var(--ink); background: var(--bg); border: 2px solid var(--line); border-radius: 14px; padding: .7rem .8rem; }
+.inp:focus, .btn:focus-visible, .chip:focus-visible, .tab:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { font: 700 .95rem var(--body); border: 2px solid var(--line); background: var(--card); color: var(--ink); border-radius: 14px; padding: .55rem .8rem; cursor: pointer; min-height: 44px; }
+.chip[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); }
+.hero { text-align: center; padding: 26px 8px 8px; }
+.grawlix { font-family: var(--head); font-size: 1.1rem; color: var(--accent); letter-spacing: 2px; }
+.ste-logo { display: block; width: 180px; max-width: 60%; height: auto; margin: 22px auto 0; opacity: .9; }
+.top { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
+.icon-btn { border: 0; background: var(--card); color: var(--ink); width: 42px; height: 42px; border-radius: 50%; font-size: 1.2rem; cursor: pointer; box-shadow: var(--shadow); flex: none; }
+.badge { display: inline-block; min-width: 1.4em; padding: 0 .4em; border-radius: 999px; background: var(--accent); color: #fff; font-size: .78rem; font-weight: 800; text-align: center; }
+.pill { display: inline-block; font-size: .78rem; font-weight: 800; padding: .15rem .55rem; border-radius: 999px; background: var(--line); }
+.pill.red { background: var(--accent-soft); color: var(--accent); }
+.pill.green { background: var(--mint-soft); color: var(--mint); }
+.pill.gold { background: var(--gold-soft); color: #9a6a00; }
+@media (prefers-color-scheme: dark) { .pill.gold { color: var(--gold); } }
+/* the jar */
+.jar-box { display: flex; align-items: center; gap: 14px; }
+.jar-box svg { width: 96px; height: auto; flex: none; }
+.jar-total { font-family: var(--head); font-size: 2.2rem; line-height: 1; }
+.countdown { font-weight: 800; color: var(--muted); }
+/* tabs along the bottom */
+.tabs { position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; display: grid; grid-template-columns: repeat(4, 1fr); background: var(--card); border-top: 1.5px solid var(--line); padding-bottom: env(safe-area-inset-bottom, 0px); }
+@media (min-width: 700px) { .tabs { left: 50%; right: auto; width: 34rem; transform: translateX(-50%); border: 1.5px solid var(--line); border-bottom: 0; border-radius: 20px 20px 0 0; } }
+.tab { border: 0; background: none; color: var(--muted); font: 700 .78rem var(--body); padding: 8px 4px 10px; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 2px; min-height: 56px; position: relative; }
+.tab b { font-size: 1.25rem; line-height: 1.2; }
+.tab[aria-current="page"] { color: var(--accent); }
+.tab .badge { position: absolute; top: 4px; right: calc(50% - 24px); }
+.fab { position: fixed; z-index: 21; right: max(16px, calc(50% - 17rem + 16px)); bottom: calc(76px + env(safe-area-inset-bottom, 0px)); border: 0; border-radius: 999px; background: var(--accent); color: #fff; font: 700 1.05rem var(--head); padding: .9rem 1.3rem; box-shadow: 0 12px 26px -10px rgba(232,81,58,.8); cursor: pointer; }
+/* lists */
+.item { display: flex; gap: 12px; align-items: flex-start; padding: 10px 0; border-bottom: 1px solid var(--line); }
+.item:last-child { border-bottom: 0; }
+.avatar { width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; font-weight: 800; color: #fff; flex: none; }
+.rank { font-family: var(--head); font-size: 1.3rem; width: 28px; text-align: center; flex: none; }
+.bar { height: 8px; border-radius: 4px; background: var(--line); overflow: hidden; margin-top: 4px; }
+.bar i { display: block; height: 100%; background: var(--gold); }
+/* sheets and toasts */
+.sheet-back { position: fixed; inset: 0; z-index: 40; background: rgba(30,15,5,.45); display: flex; align-items: flex-end; justify-content: center; }
+.sheet { width: min(100%, 34rem); max-height: 92dvh; overflow: auto; background: var(--card); border-radius: 24px 24px 0 0; padding: 18px 16px calc(18px + env(safe-area-inset-bottom, 0px)); animation: up .18s ease-out; }
+@keyframes up { from { transform: translateY(30px); opacity: .5; } to { transform: none; opacity: 1; } }
+@media (min-width: 700px) { .sheet-back { align-items: center; } .sheet { border-radius: 24px; } }
+#toasts { position: fixed; left: 50%; transform: translateX(-50%); top: calc(12px + env(safe-area-inset-top, 0px)); z-index: 60; display: grid; gap: 8px; width: min(92%, 26rem); }
+.toast { background: var(--ink); color: var(--bg); border-radius: 14px; padding: .7rem 1rem; font-weight: 700; box-shadow: var(--shadow); }
+.practice { background: var(--gold-soft); border: 1.5px dashed var(--gold); border-radius: 14px; padding: 8px 12px; font-size: .88rem; margin: 6px 0 4px; }
+.big-emoji { font-size: 2.4rem; line-height: 1; }
+.center { text-align: center; }
+.stack > * + * { margin-top: 10px; }
+@media (prefers-reduced-motion: reduce) { .sheet { animation: none; } }
+</style>
+</head>
+<body>
+<div id="app" class="wrap"></div>
+<div id="toasts" aria-live="polite"></div>
+<div id="sheet-root"></div>
+
+<script type="module">
+/* =========================================================
+   PottyMouthPocket — The Spectrum Tech Engine
+   A swear jar with a difference: someone hears a swear and accuses,
+   the accused accepts or disputes (the group votes), and at the end
+   of the round the cleanest mouth collects the jar.
+   The app never handles money: it only keeps score. Paying is done
+   outside the app (a shared Revolut wallet, cash, or square up at the end).
+   On thespectrumtechengine.com it uses Firebase; anywhere else it runs as a
+   practice copy kept on this device, with pretend friends to try it out.
+   ========================================================= */
+
+/* ---------------- settings ---------------- */
+const FIREBASE_CONFIG = { // the potty-mouth Firebase project (these are public settings, not secrets)
+  apiKey: "AIzaSyAB8dp2UqxZKw9GisGKjeX443_xRqPeokM",
+  authDomain: "potty-mouth-88ff2.firebaseapp.com",
+  projectId: "potty-mouth-88ff2",
+  storageBucket: "potty-mouth-88ff2.firebasestorage.app",
+  messagingSenderId: "276304743690",
+  appId: "1:276304743690:web:135d90b14f84efa93b7ef3",
+};
+const FB = 'https://www.gstatic.com/firebasejs/12.19.0/';
+const LIVE_HOST = /(^|\.)github\.io$|^(www\.)?(the)?spectrumtechengine\.com$/i.test(location.hostname);
+const APP_URL = 'https://thespectrumtechengine.com/potty-mouth/';
+const DAY = 864e5;
+const VOTE_WINDOW = 2 * DAY;              // a dispute is settled by the votes in after 48 hours
+const DEFAULT_TIERS = [
+  { id: 'mild', label: 'Mild slip', emoji: '🤭', amount: 0.5 },
+  { id: 'major', label: 'Proper swear', emoji: '😤', amount: 1 },
+  { id: 'filth', label: 'Absolute filth', emoji: '🤬', amount: 2 },
+];
+const STAKES = {
+  money: { emoji: '💶', label: 'Money', blurb: 'Swears cost money. The cleanest mouth collects the jar.' },
+  forfeit: { emoji: '🍕', label: 'A forfeit', blurb: 'The dirtiest mouth pays a forfeit, like buying the takeaway.' },
+  bragging: { emoji: '🏆', label: 'Bragging rights', blurb: 'No money. Just glory for the cleanest mouth.' },
+};
+const JAR_WAYS = {
+  wallet: { emoji: '🏦', label: 'Shared wallet', blurb: 'Pay each swear into a shared Revolut (or other) wallet.' },
+  cash: { emoji: '🫙', label: 'A real jar', blurb: 'Pay in cash into a jar at home or work.' },
+  settle: { emoji: '🤝', label: 'Settle at the end', blurb: 'Keep a tab and square up when the round ends.' },
+};
+const COLORS = ['#E8513A', '#2E9E7A', '#7B5CD6', '#E8913A', '#2F7FD1', '#C2477F', '#4E8C2E', '#B8732E'];
+
+/* ---------------- small helpers ---------------- */
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const clean = (s, n) => String(s || '').replace(/\s+/g, ' ').trim().slice(0, n);
+const rid = () => Math.random().toString(36).slice(2, 10) + Date.now().toString(36).slice(-4);
+const makeCode = () => Array.from({ length: 6 }, () => 'ABCDEFGHJKMNPQRSTUVWXYZ23456789'[Math.floor(Math.random() * 31)]).join('');
+const ste = (f, ...a) => { try { if (window.STE && window.STE[f]) window.STE[f](...a); } catch (e) {} };
+const local = {
+  get(k, d) { try { const v = localStorage.getItem('pmp-' + k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem('pmp-' + k, JSON.stringify(v)); } catch (e) {} },
+};
+function money(n, cur) {
+  try { return new Intl.NumberFormat('en-IE', { style: 'currency', currency: cur || 'EUR' }).format(n || 0); }
+  catch (e) { return (cur || '€') + (n || 0).toFixed(2); }
+}
+function timeLeft(ms) {
+  if (ms <= 0) return 'Round over';
+  const d = Math.floor(ms / DAY), h = Math.floor(ms % DAY / 36e5), m = Math.floor(ms % 36e5 / 6e4);
+  return d ? `${d}d ${h}h left` : h ? `${h}h ${m}m left` : `${m}m left`;
+}
+function ago(t) {
+  const s = (Date.now() - t) / 1000;
+  if (s < 60) return 'just now'; if (s < 3600) return Math.floor(s / 60) + 'm ago'; if (s < 86400) return Math.floor(s / 3600) + 'h ago';
+  return new Date(t).toLocaleDateString('en-IE', { day: 'numeric', month: 'short' });
+}
+function toast(msg, ms = 3500) {
+  const t = document.createElement('div'); t.className = 'toast'; t.textContent = msg;
+  $('#toasts').append(t); setTimeout(() => t.remove(), ms);
+}
+function share(text, url) {
+  ste('track', 'share');
+  const full = url ? `${text} ${url}` : text;
+  if (navigator.share) return navigator.share(url ? { text, url } : { text }).catch(() => {});
+  const wa = 'https://wa.me/?text=' + encodeURIComponent(full);
+  if (!window.open(wa, '_blank')) location.href = wa;
+}
+
+/* ---------------- backends: Firebase on the website, a practice copy anywhere else ---------------- */
+// Practice copy: everything lives in this browser, with pretend friends who react a bit like real people.
+function practiceBackend() {
+  const KEY = 'pmp-practice';
+  const load = () => { try { return JSON.parse(localStorage.getItem(KEY)) || { groups: {} }; } catch (e) { return { groups: {} }; } };
+  let db = load();
+  const subs = new Set();
+  const save = () => { try { localStorage.setItem(KEY, JSON.stringify(db)); } catch (e) {} subs.forEach(f => f()); };
+  const uid = local.get('practice-uid', null) || (() => { const u = 'me-' + rid(); local.set('practice-uid', u); return u; })();
+  const G = c => db.groups[c];
+  const api = {
+    mode: 'practice', uid,
+    async start() { return uid; },
+    async getGroup(c) { return G(c)?.doc || null; },
+    async createGroup(c, doc, member) { db.groups[c] = { doc: { ...doc }, members: { [uid]: member }, claims: {} }; save(); },
+    async joinGroup(c, member) { G(c).members[uid] = member; save(); },
+    async updateGroup(c, patch) { Object.assign(G(c).doc, patch); save(); },
+    async updateMember(c, u, patch) { Object.assign(G(c).members[u], patch); save(); },
+    async removeMember(c, u) { delete G(c).members[u]; save(); },
+    async addClaim(c, claim) { const id = rid(); G(c).claims[id] = { ...claim }; save(); return id; },
+    async updateClaim(c, id, patch) { const cl = G(c).claims[id]; for (const [k, v] of Object.entries(patch)) { if (k.startsWith('votes.')) (cl.votes = cl.votes || {})[k.slice(6)] = v; else cl[k] = v; } save(); },
+    watch(c, cb) {
+      const f = () => { const g = G(c); if (g) cb({ doc: g.doc, members: g.members, claims: g.claims }); };
+      subs.add(f); setTimeout(f, 0); return () => subs.delete(f);
+    },
+    // pretend friends, so the game can be tried alone
+    addFriends(c) {
+      const names = ['Aoife', 'Dec', 'Niamh', 'Gav'];
+      for (const n of names) { const u = 'bot-' + n.toLowerCase(); if (!G(c).members[u]) G(c).members[u] = { name: n, color: COLORS[(Object.keys(G(c).members).length) % COLORS.length], joinedAt: Date.now(), bot: true }; }
+      save();
+    },
+    tickBots(c) {
+      const g = G(c); if (!g) return;
+      let changed = false;
+      for (const [id, cl] of Object.entries(g.claims)) {
+        const accused = g.members[cl.accused];
+        if (cl.status === 'pending' && accused?.bot && Date.now() - cl.createdAt > 2500) {
+          if (Math.random() < .65) { cl.status = 'accepted'; cl.respondedAt = Date.now(); if (g.doc.stake === 'money' && g.doc.jarWay !== 'settle' && Math.random() < .7) { cl.paid = true; cl.paidAt = Date.now() + 1500; } }
+          else { cl.status = 'disputed'; cl.disputed = true; cl.respondedAt = Date.now(); cl.votes = {}; }
+          changed = true;
+        }
+        if (cl.status === 'disputed') for (const [u, m] of Object.entries(g.members)) if (m.bot && u !== cl.accused && u !== cl.accuser && cl.votes?.[u] === undefined && Date.now() - cl.respondedAt > 3000) { (cl.votes = cl.votes || {})[u] = Math.random() < .6; changed = true; }
+      }
+      // now and then a pretend friend catches you swearing
+      if (Date.now() < g.doc.round.end && Math.random() < .08 && Object.values(g.claims).filter(x => x.accused === uid && x.status === 'pending').length === 0) {
+        const bots = Object.entries(g.members).filter(([, m]) => m.bot);
+        if (bots.length) {
+          const [bu] = bots[Math.floor(Math.random() * bots.length)], t = g.doc.tiers[Math.floor(Math.random() * g.doc.tiers.length)];
+          g.claims[rid()] = { accuser: bu, accused: uid, tier: t.id, amount: t.amount, note: ['in the kitchen', 'on the phone to your mam', 'at the match', 'when the WiFi dropped'][Math.floor(Math.random() * 4)], status: 'pending', votes: {}, round: g.doc.round.no, createdAt: Date.now(), paid: false };
+          changed = true;
+        }
+      }
+      if (changed) save();
+    },
+    resetPractice() { localStorage.removeItem(KEY); db = load(); save(); },
+  };
+  addEventListener('storage', e => { if (e.key === KEY) { db = load(); subs.forEach(f => f()); } });
+  return api;
+}
+
+// The real thing: Firestore. groups/{code}, groups/{code}/members/{uid}, groups/{code}/claims/{id}
+async function firebaseBackend() {
+  const [appM, authM, fsM] = await Promise.all([import(FB + 'firebase-app.js'), import(FB + 'firebase-auth.js'), import(FB + 'firebase-firestore.js')]);
+  const app = appM.initializeApp(FIREBASE_CONFIG, 'potty-mouth');
+  const auth = authM.getAuth(app), db = fsM.getFirestore(app);
+  await auth.authStateReady();
+  if (!auth.currentUser) await authM.signInAnonymously(auth);
+  const uid = auth.currentUser.uid, { doc, collection, getDoc, setDoc, updateDoc, deleteDoc, addDoc, onSnapshot, deleteField } = fsM;
+  const gref = c => doc(db, 'groups', c);
+  return {
+    mode: 'live', uid,
+    async start() { return uid; },
+    async getGroup(c) { const s = await getDoc(gref(c)); return s.exists() ? s.data() : null; },
+    async createGroup(c, d, member) { await setDoc(gref(c), d); await setDoc(doc(db, 'groups', c, 'members', uid), member); },
+    async joinGroup(c, member) { await setDoc(doc(db, 'groups', c, 'members', uid), member); },
+    updateGroup: (c, patch) => updateDoc(gref(c), patch),
+    updateMember: (c, u, patch) => updateDoc(doc(db, 'groups', c, 'members', u), patch),
+    removeMember: (c, u) => deleteDoc(doc(db, 'groups', c, 'members', u)),
+    async addClaim(c, claim) { const r = await addDoc(collection(db, 'groups', c, 'claims'), claim); return r.id; },
+    updateClaim: (c, id, patch) => updateDoc(doc(db, 'groups', c, 'claims', id), patch),
+    watch(c, cb) {
+      const st = { doc: null, members: {}, claims: {} }, got = new Set(), fire = (k) => { got.add(k); if (st.doc && got.size === 3) cb({ ...st }); }; // wait until all three have loaded once
+      const offs = [
+        onSnapshot(gref(c), s => { st.doc = s.data() || null; fire('doc'); }, e => console.warn(e)),
+        onSnapshot(collection(db, 'groups', c, 'members'), q => { st.members = {}; q.forEach(d => st.members[d.id] = d.data()); fire('members'); }, e => console.warn(e)),
+        onSnapshot(collection(db, 'groups', c, 'claims'), q => { st.claims = {}; q.forEach(d => st.claims[d.id] = d.data()); fire('claims'); }, e => console.warn(e)),
+      ];
+      return () => offs.forEach(f => f());
+    },
+  };
+}
+
+/* ---------------- the rules of the game ---------------- */
+const counts = cl => cl.status === 'accepted' || cl.status === 'upheld';
+const tierOf = (g, id) => g.doc.tiers.find(t => t.id === id) || { label: 'Swear', emoji: '🤬', amount: 0 };
+const isMoney = g => g.doc.stake === 'money';
+const roundClaims = g => Object.entries(g.claims).filter(([, c]) => c.round === g.doc.round.no);
+// who gets to vote on a dispute: everyone except the accused and the accuser
+const voters = (g, cl) => Object.keys(g.members).filter(u => u !== cl.accused && u !== cl.accuser);
+// work out a dispute: a majority of possible voters decides it; after 48 hours, the votes cast decide (a tie throws it out)
+function verdict(g, cl) {
+  if (cl.status !== 'disputed') return null;
+  const vs = voters(g, cl); if (!vs.length) return null; // two-person group: the accuser stands by it or withdraws
+  const yes = vs.filter(u => cl.votes?.[u] === true).length, no = vs.filter(u => cl.votes?.[u] === false).length, need = Math.floor(vs.length / 2) + 1;
+  if (yes >= need) return 'upheld';
+  if (no >= vs.length - need + 1) return 'dropped';
+  if (Date.now() - (cl.respondedAt || cl.createdAt) > VOTE_WINDOW) return yes > no ? 'upheld' : 'dropped';
+  return null;
+}
+function standings(g) {
+  const s = {};
+  for (const [u, m] of Object.entries(g.members)) s[u] = { uid: u, name: m.name, color: m.color, swears: 0, owed: 0, paid: 0, joinedAt: m.joinedAt || 0 };
+  for (const [, c] of roundClaims(g)) if (counts(c) && s[c.accused]) { s[c.accused].swears++; s[c.accused].owed += c.amount || 0; if (c.paid) s[c.accused].paid += c.amount || 0; }
+  const list = Object.values(s).sort((a, b) => a.swears - b.swears || a.owed - b.owed || a.joinedAt - b.joinedAt);
+  const jar = list.reduce((t, p) => t + (g.doc.jarWay === 'settle' ? p.owed : p.paid), 0);
+  const swears = list.reduce((t, p) => t + p.swears, 0);
+  const best = list.length ? list[0].swears : 0;
+  const winners = list.filter(p => p.swears === best && p.owed === list[0].owed);
+  return { list, jar, swears, winners, dirtiest: list.length > 1 ? list[list.length - 1] : null };
+}
+
+/* ---------------- state ---------------- */
+const S = {
+  backend: null, uid: null,
+  me: local.get('me', null),                    // { name }
+  groups: local.get('groups', []),              // codes this phone is in
+  view: { page: 'home' }, g: null, unwatch: null, timer: null,
+};
+const saveGroups = () => local.set('groups', S.groups);
+const B = () => S.backend;
+const member = (u) => S.g?.members[u] || { name: 'Someone', color: '#999' };
+const avatar = (u, size = 38) => { const m = member(u); return `<span class="avatar" style="background:${esc(m.color || '#999')};width:${size}px;height:${size}px">${esc((m.name || '?').slice(0, 1).toUpperCase())}</span>`; };
+
+/* ---------------- screens ---------------- */
+function render() {
+  const app = $('#app');
+  const v = S.view;
+  if (!S.me) return app.innerHTML = welcomeHTML();
+  if (v.page === 'home') app.innerHTML = homeHTML();
+  else if (v.page === 'create') app.innerHTML = createHTML();
+  else if (v.page === 'group' && S.g) app.innerHTML = groupHTML();
+  else app.innerHTML = `<div class="hero"><p class="muted">Opening…</p></div>`;
+}
+
+const practiceNote = () => B()?.mode === 'practice'
+  ? `<div class="practice">🧪 <b>Practice copy.</b> Groups here stay on this device. ${S.view.page === 'group' ? '<button class="btn small ghost" data-a="friends">Add pretend friends</button>' : ''}</div>` : '';
+const logo = `<img class="ste-logo" src="ste-logo.webp" alt="Created By The Spectrum Tech Engine">`;
+
+function welcomeHTML() {
+  return `<div class="hero">
+    <img src="icon-192.png" alt="" width="96" height="96" style="border-radius:24px;box-shadow:var(--shadow)">
+    <h1 style="margin-top:10px">PottyMouthPocket</h1>
+    <p class="grawlix">#@%&amp;!</p>
+    <p>The swear jar with a difference. Catch your friends swearing, they <b>accept</b> or <b>dispute</b>, and at the end of the round <b>the cleanest mouth collects the jar</b>.</p>
+  </div>
+  <div class="card">
+    <form data-f="me">
+      <label class="field"><span>What should your friends call you?</span>
+        <input class="inp" name="name" maxlength="20" placeholder="Type your name" autocomplete="given-name" required></label>
+      <button class="btn primary wide">Let's go</button>
+    </form>
+    <p class="tiny muted center">No email, no password. The app keeps score; it never takes or holds any money.</p>
+  </div>${logo}`;
+}
+
+function homeHTML() {
+  return `<div class="top"><div class="grow"><p class="muted tiny" style="margin:0">Hiya ${esc(S.me.name)} 👋</p><h1>Your jars</h1></div>
+    <button class="icon-btn" data-a="rename" aria-label="Change your name">✏️</button></div>
+  ${practiceNote()}
+  <div id="group-list">${S.groups.length ? S.groups.map(c => `<button class="card row" style="width:100%;text-align:left;font:inherit;color:inherit;cursor:pointer" data-a="open" data-code="${esc(c)}">
+      <span class="big-emoji">🫙</span><span class="grow"><h3 data-name="${esc(c)}">Group ${esc(c)}</h3><span class="muted tiny">Code ${esc(c)}</span></span><span aria-hidden="true">›</span></button>`).join('')
+    : `<div class="card center"><p class="big-emoji">🤐</p><p><b>No jars yet.</b></p><p class="muted">Start a group for your house, your friends or your team, or join one with a code.</p></div>`}</div>
+  <div class="stack">
+    <button class="btn primary wide" data-a="go-create">Start a new jar</button>
+    <button class="btn ghost wide" data-a="join">Join with a code</button>
+  </div>
+  <div class="card tiny muted">
+    <b>How it works</b>
+    <p>1. Someone swears. 2. Whoever heard it accuses them in the app. 3. They accept, or dispute and the group votes. 4. When the round ends, the cleanest mouth wins.</p>
+    <p>Privacy: your groups only show names and swear counts to the people in them. To help improve the app, it counts a few anonymous things, like how many jars are started. Questions: <a href="mailto:privacy@thespectrumtechengine.com">privacy@thespectrumtechengine.com</a>. Need help or found a bug? <a href="mailto:support@thespectrumtechengine.com">support@thespectrumtechengine.com</a></p>
+  </div>${logo}`;
+}
+
+function createHTML() {
+  const d = S.view.draft;
+  const stakeChips = Object.entries(STAKES).map(([k, s]) => `<button type="button" class="chip" data-a="stake" data-v="${k}" aria-pressed="${d.stake === k}">${s.emoji} ${s.label}</button>`).join('');
+  const jarChips = Object.entries(JAR_WAYS).map(([k, s]) => `<button type="button" class="chip" data-a="jarway" data-v="${k}" aria-pressed="${d.jarWay === k}">${s.emoji} ${s.label}</button>`).join('');
+  return `<div class="top"><button class="icon-btn" data-a="back" aria-label="Back">←</button><h2 class="grow">Start a new jar</h2></div>
+  <form data-f="create">
+    <div class="card">
+      <label class="field"><span>Name your jar</span><input class="inp" name="gname" maxlength="30" value="${esc(d.name)}" placeholder="e.g. The Flat, Office Swear Jar" required></label>
+      <div class="field"><span>What's at stake?</span><div class="chips">${stakeChips}</div><p class="tiny muted">${STAKES[d.stake].blurb}</p></div>
+      ${d.stake === 'forfeit' ? `<label class="field"><span>The forfeit for the dirtiest mouth</span><input class="inp" name="forfeit" maxlength="60" value="${esc(d.forfeit)}" placeholder="e.g. buys the Friday takeaway"></label>` : ''}
+    </div>
+    ${d.stake === 'money' ? `<div class="card">
+      <div class="field"><span>Currency</span><div class="chips">${['EUR', 'GBP', 'USD'].map(c => `<button type="button" class="chip" data-a="cur" data-v="${c}" aria-pressed="${d.currency === c}">${money(0, c).replace(/[0.,]/g, '').trim() || c} ${c}</button>`).join('')}</div></div>
+      <div class="field"><span>Price list</span>
+        ${d.tiers.map((t, i) => `<div class="row" style="margin:6px 0"><span style="width:28px">${t.emoji}</span><span class="grow">${esc(t.label)}</span>
+          <input class="inp" style="width:6.5rem;text-align:right" inputmode="decimal" name="amt${i}" value="${t.amount.toFixed(2)}" aria-label="${esc(t.label)} costs"></div>`).join('')}</div>
+      <div class="field"><span>How is the jar paid?</span><div class="chips">${jarChips}</div><p class="tiny muted">${JAR_WAYS[d.jarWay].blurb}</p></div>
+      ${d.jarWay === 'wallet' ? `<label class="field"><span>The shared wallet's link or how to pay in</span><input class="inp" name="jarInfo" maxlength="160" value="${esc(d.jarInfo)}" placeholder="e.g. a revolut.me link, or 'Revolut group: The Flat Jar'"></label>` : ''}
+      <p class="tiny muted">The app never takes or holds money. It only keeps score; the group pays outside the app.</p>
+    </div>` : ''}
+    <div class="card">
+      <div class="field"><span>How long is a round?</span><div class="chips">${[[7, '1 week'], [14, '2 weeks'], [30, '1 month']].map(([n, l]) => `<button type="button" class="chip" data-a="days" data-v="${n}" aria-pressed="${d.days === n}">${l}</button>`).join('')}</div></div>
+    </div>
+    <button class="btn primary wide">Start the jar</button>
+  </form>`;
+}
+
+function jarSVG(fill) {
+  const h = Math.max(0, Math.min(1, fill)) * 70;
+  return `<svg viewBox="0 0 100 120" aria-hidden="true"><defs><clipPath id="jc"><path d="M22 34h56v66a14 14 0 0 1-14 14H36a14 14 0 0 1-14-14z"/></clipPath></defs>
+    <rect x="26" y="12" width="48" height="16" rx="5" fill="var(--gold)"/>
+    <path d="M22 34h56v66a14 14 0 0 1-14 14H36a14 14 0 0 1-14-14z" fill="var(--jar)" stroke="var(--ink)" stroke-width="3" opacity=".9"/>
+    <g clip-path="url(#jc)"><rect x="20" y="${114 - h}" width="60" height="${h + 2}" fill="var(--gold)"/>
+    ${h > 8 ? Array.from({ length: Math.min(9, Math.round(h / 8)) }, (_, i) => `<ellipse cx="${32 + (i * 17) % 38}" cy="${112 - (i * 7.5) % Math.max(8, h - 4)}" rx="8" ry="3.2" fill="#E59A12" opacity=".9"/>`).join('') : ''}</g>
+    <path d="M22 34h56" stroke="var(--ink)" stroke-width="3"/><text x="50" y="70" text-anchor="middle" font-size="16" font-family="Fredoka" fill="var(--ink)" opacity=".55">#@%!</text></svg>`;
+}
+
+function groupHTML() {
+  const g = S.g, tab = S.view.tab || 'jar';
+  const mine = Object.entries(g.claims).filter(([, c]) => c.accused === S.uid && c.status === 'pending');
+  const toVote = Object.entries(g.claims).filter(([, c]) => c.status === 'disputed' && voters(g, c).includes(S.uid) && c.votes?.[S.uid] === undefined);
+  const toStand = Object.entries(g.claims).filter(([, c]) => c.status === 'disputed' && c.accuser === S.uid && !voters(g, c).length);
+  const actions = mine.length + toVote.length + toStand.length;
+  const body = tab === 'jar' ? jarTab(g, mine, toVote, toStand) : tab === 'board' ? boardTab(g) : tab === 'ledger' ? ledgerTab(g) : groupTab(g);
+  const tabBtn = (k, emoji, label, badge) => `<button class="tab" data-a="tab" data-v="${k}" ${tab === k ? 'aria-current="page"' : ''}><b>${emoji}</b>${label}${badge ? `<span class="badge">${badge}</span>` : ''}</button>`;
+  return `<div class="top"><button class="icon-btn" data-a="home" aria-label="All jars">←</button>
+    <div class="grow"><h2>${esc(g.doc.name)}</h2><span class="muted tiny">${STAKES[g.doc.stake].emoji} ${esc(STAKES[g.doc.stake].label)}${g.doc.stake === 'forfeit' && g.doc.forfeit ? ': ' + esc(g.doc.forfeit) : ''} · Round ${g.doc.round.no}</span></div>
+    <button class="icon-btn" data-a="invite" aria-label="Invite people">➕</button></div>
+  ${practiceNote()}
+  ${body}
+  ${Date.now() < g.doc.round.end ? `<button class="fab" data-a="accuse">🤬 I heard a swear!</button>` : ''}
+  <nav class="tabs">${tabBtn('jar', '🫙', 'Jar', actions)}${tabBtn('board', '🏆', 'Leaderboard')}${tabBtn('ledger', '📜', 'Ledger')}${tabBtn('group', '👥', 'Group')}</nav>`;
+}
+
+function claimLine(g, id, c, opts = {}) {
+  const t = tierOf(g, c.tier);
+  return `<div class="item"><span>${avatar(c.accuser, 34)}</span><div class="grow">
+    <div><b>${esc(member(c.accuser).name)}</b> says <b>${c.accused === S.uid ? 'you' : esc(member(c.accused).name)}</b> swore ${t.emoji}</div>
+    <div class="muted tiny">${esc(t.label)}${isMoney(g) ? ' · ' + money(c.amount, g.doc.currency) : ''}${c.note ? ' · “' + esc(c.note) + '”' : ''} · ${ago(c.createdAt)}</div>
+    ${opts.buttons || ''}</div></div>`;
+}
+
+function jarTab(g, mine, toVote, toStand) {
+  const st = standings(g), over = Date.now() >= g.doc.round.end, cur = g.doc.currency;
+  const leader = st.winners.map(w => w.uid === S.uid ? 'You' : w.name).join(' & ');
+  const me = st.list.find(p => p.uid === S.uid);
+  const unpaid = Object.entries(g.claims).filter(([, c]) => c.accused === S.uid && counts(c) && !c.paid && c.round === g.doc.round.no);
+  let html = '';
+  if (over) {
+    const w = st.winners.map(p => p.uid === S.uid ? 'You' : p.name).join(' & ');
+    html += `<div class="card center"><p class="big-emoji">🏆</p><h2>Round ${g.doc.round.no} is over!</h2>
+      <p><b>${esc(w)}</b> ${st.winners.length > 1 ? 'share' : 'collects'} ${isMoney(g) ? 'the jar: <b>' + money(st.jar, cur) + '</b>' : g.doc.stake === 'bragging' ? 'the bragging rights' : 'the win'}.</p>
+      ${g.doc.stake === 'forfeit' && st.dirtiest ? `<p>🍕 <b>${esc(st.dirtiest.uid === S.uid ? 'You' : st.dirtiest.name)}</b> ${st.dirtiest.uid === S.uid ? 'owe' : 'owes'} the forfeit${g.doc.forfeit ? ': ' + esc(g.doc.forfeit) : ''}.</p>` : ''}
+      ${isMoney(g) && g.doc.jarWay === 'settle' ? settleUpHTML(g, st) : ''}
+      <div class="stack"><button class="btn primary wide" data-a="share-result">Share the result</button><button class="btn ghost wide" data-a="new-round">Start round ${g.doc.round.no + 1}</button></div></div>`;
+  }
+  if (mine.length) html += `<div class="card" style="border-color:var(--accent)"><h3>⚠️ You've been accused</h3>${mine.map(([id, c]) => claimLine(g, id, c, { buttons: `<div class="row" style="margin-top:8px"><button class="btn small mint" data-a="accept" data-id="${id}">Fair cop, I accept</button><button class="btn small ghost" data-a="dispute" data-id="${id}">Dispute it</button></div>` })).join('')}</div>`;
+  if (toVote.length) html += `<div class="card" style="border-color:var(--gold)"><h3>🗳️ Your vote, please</h3><p class="muted tiny">They say they didn't swear. Did they?</p>${toVote.map(([id, c]) => claimLine(g, id, c, { buttons: `<div class="row" style="margin-top:8px"><button class="btn small primary" data-a="vote" data-v="1" data-id="${id}">They swore</button><button class="btn small ghost" data-a="vote" data-v="0" data-id="${id}">Throw it out</button></div>` })).join('')}</div>`;
+  if (toStand.length) html += `<div class="card" style="border-color:var(--gold)"><h3>🤔 They're disputing it</h3><p class="muted tiny">There's nobody else to vote. Do you stand by it?</p>${toStand.map(([id, c]) => claimLine(g, id, c, { buttons: `<div class="row" style="margin-top:8px"><button class="btn small primary" data-a="stand" data-id="${id}">I stand by it</button><button class="btn small ghost" data-a="withdraw" data-id="${id}">Withdraw it</button></div>` })).join('')}</div>`;
+  const raw = isMoney(g) ? 1 - Math.exp(-st.jar / 8) : 1 - Math.exp(-st.swears / 8), fill = raw ? Math.max(.18, raw) : 0;
+  html += `<div class="card"><div class="jar-box">${jarSVG(fill)}<div class="grow">
+      <div class="muted tiny">${isMoney(g) ? (g.doc.jarWay === 'settle' ? 'Owed to the jar' : 'In the jar') : 'Swears this round'}</div>
+      <div class="jar-total">${isMoney(g) ? money(st.jar, cur) : st.swears}</div>
+      <div class="countdown" data-countdown>${over ? 'Round over' : timeLeft(g.doc.round.end - Date.now())}</div>
+      ${st.list.length > 1 && !over ? `<div class="tiny" style="margin-top:6px">${st.winners.length === st.list.length ? '😇 Everyone\x27s spotless so far' : `🏆 Cleanest so far: <b>${esc(leader)}</b>`}</div>` : ''}</div></div></div>`;
+  if (isMoney(g) && unpaid.length && g.doc.jarWay !== 'settle') {
+    const total = unpaid.reduce((t, [, c]) => t + c.amount, 0);
+    html += `<div class="card"><h3>💸 You owe the jar ${money(total, cur)}</h3>
+      <p class="muted tiny">${g.doc.jarWay === 'cash' ? 'Pop it in the jar, then mark it paid.' : 'Pay it into the shared wallet, then mark it paid.'}</p>
+      <div class="row wrap-row">${g.doc.jarWay === 'wallet' ? `<button class="btn small primary" data-a="pay" data-amt="${total}">Pay ${money(total, cur)}</button>` : ''}<button class="btn small mint" data-a="paid-all">I've paid it</button></div></div>`;
+  }
+  if (me && !over) html += `<p class="muted tiny center">You: ${me.swears} swear${me.swears === 1 ? '' : 's'} this round${isMoney(g) ? ' · ' + money(me.owed, cur) : ''}</p>`;
+  if (Object.keys(g.members).length < 2) html += `<div class="card center"><p class="big-emoji">👀</p><p><b>It's just you so far.</b> Invite the people you live or work with.</p><button class="btn primary" data-a="invite">Invite people</button></div>`;
+  return html;
+}
+
+function settleUpHTML(g, st) {
+  const winners = st.winners.map(w => w.uid), cur = g.doc.currency;
+  const owers = st.list.filter(p => !winners.includes(p.uid) && p.owed > 0);
+  if (!owers.length) return '';
+  return `<div style="text-align:left;margin:10px 0"><b>Settling up</b>${owers.map(p => `<div class="row" style="margin-top:4px"><span class="grow">${esc(p.uid === S.uid ? 'You' : p.name)}</span><b>${money(p.owed / winners.length, cur)}</b><span class="muted tiny">to ${esc(st.winners.map(w => w.uid === S.uid ? 'you' : w.name).join(' & '))}${winners.length > 1 ? ' each' : ''}</span></div>`).join('')}</div>`;
+}
+
+function boardTab(g) {
+  const st = standings(g), cur = g.doc.currency, total = st.list.reduce((t, p) => t + p.owed, 0);
+  return `<div class="card"><h3>🏆 Cleanest mouths this round</h3>
+    ${st.list.map((p, i) => `<div class="item"><span class="rank">${i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : i + 1}</span>${avatar(p.uid)}
+      <div class="grow"><b>${esc(p.uid === S.uid ? p.name + ' (you)' : p.name)}</b> ${st.winners.some(w => w.uid === p.uid) && st.winners.length < st.list.length ? '<span class="pill gold">in the lead</span>' : ''}
+      <div class="muted tiny">${p.swears} swear${p.swears === 1 ? '' : 's'}${isMoney(g) ? ` · ${money(p.owed, cur)}${total ? ` · ${Math.round(p.owed / total * 100)}% of the jar` : ''}` : ''}${isMoney(g) && p.owed - p.paid > 0.004 && g.doc.jarWay !== 'settle' ? ` · <span class="pill red">${money(p.owed - p.paid, cur)} unpaid</span>` : ''}</div>
+      ${isMoney(g) && total ? `<div class="bar"><i style="width:${(p.owed / total * 100).toFixed(1)}%"></i></div>` : ''}</div></div>`).join('')}
+  </div>${(g.doc.history || []).length ? `<div class="card"><h3>📚 Past rounds</h3>${[...g.doc.history].reverse().map(h => `<div class="item"><span class="rank">🏆</span><div class="grow"><b>Round ${h.no}: ${esc(h.winners)}</b><div class="muted tiny">${h.swears} swear${h.swears === 1 ? '' : 's'}${isMoney(g) ? ' · jar ' + money(h.jar, cur) : ''}${h.dirtiest ? ' · dirtiest: ' + esc(h.dirtiest) : ''}</div></div></div>`).join('')}</div>` : ''}`;
+}
+
+function ledgerTab(g) {
+  // every claim tells its story: accused → accepted / disputed → votes → decided → paid
+  const events = [];
+  for (const [id, c] of Object.entries(g.claims)) {
+    const A = member(c.accuser).name, D = member(c.accused).name, t = tierOf(g, c.tier);
+    events.push({ t: c.createdAt, html: `🤬 <b>${esc(A)}</b> accused <b>${esc(D)}</b>: ${esc(t.label.toLowerCase())}${isMoney(g) ? ' (' + money(c.amount, g.doc.currency) + ')' : ''}${c.note ? ' · “' + esc(c.note) + '”' : ''}`, round: c.round });
+    if (c.respondedAt) events.push({ t: c.respondedAt, html: !c.disputed ? `✅ <b>${esc(D)}</b> accepted it` : `🙅 <b>${esc(D)}</b> disputed it`, round: c.round });
+    if (c.decidedAt) events.push({ t: c.decidedAt, html: c.status === 'upheld' ? `⚖️ It stands${c.stood ? ` (${esc(A)} stood by it)` : ' (the group voted)'}` : `🗑️ Thrown out${c.withdrawn ? ` (${esc(A)} withdrew it)` : ' (the group voted)'}`, round: c.round });
+    if (c.paidAt) events.push({ t: c.paidAt, html: `💸 <b>${esc(D)}</b> marked ${money(c.amount, g.doc.currency)} as paid`, round: c.round });
+  }
+  events.sort((a, b) => b.t - a.t);
+  const q = (S.view.q || '').toLowerCase();
+  const shown = events.filter(e => !q || e.html.toLowerCase().includes(q)).slice(0, 200);
+  return `<div class="card"><h3>📜 Everything that happened</h3>
+    <input class="inp" data-input="q" placeholder="Search the ledger" value="${esc(S.view.q || '')}" aria-label="Search the ledger" style="margin:8px 0">
+    ${shown.length ? shown.map(e => `<div class="item"><div class="grow"><div>${e.html}</div><div class="muted tiny">${ago(e.t)} · round ${e.round}</div></div></div>`).join('') : '<p class="muted">Nothing yet. Squeaky clean.</p>'}</div>`;
+}
+
+function groupTab(g) {
+  const isAdmin = g.doc.createdBy === S.uid, meM = g.members[S.uid] || {};
+  return `<div class="card"><h3>👥 People (${Object.keys(g.members).length})</h3>
+    ${Object.entries(g.members).map(([u, m]) => `<div class="item">${avatar(u)}<div class="grow"><b>${esc(m.name)}${u === S.uid ? ' (you)' : ''}</b>${u === g.doc.createdBy ? ' <span class="pill">started it</span>' : ''}${m.payLink ? `<div class="muted tiny">💳 ${esc(m.payLink)}</div>` : ''}</div>
+      ${isAdmin && u !== S.uid ? `<button class="btn small ghost" data-a="remove" data-uid="${u}">Remove</button>` : ''}</div>`).join('')}
+    <button class="btn primary wide" data-a="invite" style="margin-top:10px">Invite people</button></div>
+  <div class="card"><h3>🙋 You in this jar</h3>
+    <form data-f="mine"><label class="field"><span>Your name here</span><input class="inp" name="name" maxlength="20" value="${esc(meM.name || '')}"></label>
+    ${isMoney(g) ? `<label class="field"><span>Your payment link (optional)</span><input class="inp" name="payLink" maxlength="120" value="${esc(meM.payLink || '')}" placeholder="e.g. revolut.me/yourname"><span class="tiny muted" style="font-weight:600">Handy for settling up with you if you win.</span></label>` : ''}
+    <button class="btn wide">Save</button></form></div>
+  <div class="card"><h3>⚙️ The rules</h3>
+    <p>${STAKES[g.doc.stake].emoji} ${esc(STAKES[g.doc.stake].label)}${g.doc.forfeit ? ': ' + esc(g.doc.forfeit) : ''}</p>
+    ${isMoney(g) ? `<p>${g.doc.tiers.map(t => `${t.emoji} ${esc(t.label)} ${money(t.amount, g.doc.currency)}`).join(' · ')}</p><p>${JAR_WAYS[g.doc.jarWay].emoji} ${esc(JAR_WAYS[g.doc.jarWay].label)}${g.doc.jarInfo ? ': ' + esc(g.doc.jarInfo) : ''}</p>` : `<p>${g.doc.tiers.map(t => `${t.emoji} ${esc(t.label)}`).join(' · ')}</p>`}
+    <p>Rounds last ${g.doc.round.days} days. This one ends ${new Date(g.doc.round.end).toLocaleString('en-IE', { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}.</p>
+    <p class="tiny muted">Code: <b>${esc(S.view.code)}</b></p></div>
+  <button class="btn ghost wide" data-a="leave">Leave this jar</button>`;
+}
+
+/* ---------------- sheets (pop-up panels) ---------------- */
+function sheet(html) {
+  const root = $('#sheet-root');
+  root.innerHTML = `<div class="sheet-back" data-a="close-sheet"><div class="sheet" role="dialog" aria-modal="true">${html}</div></div>`;
+  const first = root.querySelector('input, button.btn'); if (first) setTimeout(() => first.focus(), 60);
+}
+const closeSheet = () => { $('#sheet-root').innerHTML = ''; };
+
+function accuseSheet() {
+  const g = S.g, others = Object.entries(g.members).filter(([u]) => u !== S.uid);
+  if (!others.length) return toast('Invite someone first. You can\'t accuse yourself!');
+  S.accuse = { who: others.length === 1 ? others[0][0] : null, tier: g.doc.tiers[1]?.id || g.doc.tiers[0].id };
+  const draw = () => sheet(`<h2>🤬 Who swore?</h2>
+    <div class="chips" style="margin:10px 0">${others.map(([u, m]) => `<button class="chip" data-a="pick-who" data-uid="${u}" aria-pressed="${S.accuse.who === u}">${esc(m.name)}</button>`).join('')}</div>
+    <h3>How bad was it?</h3>
+    <div class="chips" style="margin:10px 0">${g.doc.tiers.map(t => `<button class="chip" data-a="pick-tier" data-v="${t.id}" aria-pressed="${S.accuse.tier === t.id}">${t.emoji} ${esc(t.label)}${isMoney(g) ? ' · ' + money(t.amount, g.doc.currency) : ''}</button>`).join('')}</div>
+    <label class="field"><span>Where or when? (optional)</span><input class="inp" id="acc-note" maxlength="60" placeholder="e.g. in the kitchen, on the call" value="${esc(S.accuse.note || '')}"></label>
+    <div class="stack"><button class="btn primary wide" data-a="send-accuse" ${S.accuse.who ? '' : 'disabled'}>Accuse${S.accuse.who ? ' ' + esc(member(S.accuse.who).name) : ''}</button>
+    <button class="btn ghost wide" data-a="close-sheet">Cancel</button></div>`);
+  S.accuse.draw = draw; draw();
+}
+
+function inviteSheet() {
+  const link = APP_URL + '?join=' + S.view.code;
+  sheet(`<h2>➕ Invite people</h2>
+    <p>Share the link, or tell them the code: <b style="font-size:1.4rem;letter-spacing:3px">${esc(S.view.code)}</b></p>
+    <div class="stack"><button class="btn primary wide" data-a="share-invite">Send the invite</button>
+    <button class="btn ghost wide" data-a="copy-invite">Copy the link</button>
+    <button class="btn ghost wide" data-a="close-sheet">Done</button></div>`);
+  S.inviteLink = link;
+}
+
+/* ---------------- actions ---------------- */
+async function openGroup(code) {
+  if (S.unwatch) S.unwatch();
+  S.view = { page: 'group', code, tab: 'jar' }; S.g = null; render();
+  S.unwatch = B().watch(code, g => {
+    if (!g.doc) return;
+    S.g = g;
+    if (!g.members[S.uid]) { // removed from the group, or this phone left
+      toast('You\'re not in this jar any more.'); S.groups = S.groups.filter(c => c !== code); saveGroups(); goHome(); return;
+    }
+    settleDisputes(code, g);
+    if (S.view.page === 'group' && !$('#sheet-root').innerHTML) render();
+    else if (S.view.page === 'group') { /* keep the open sheet; refresh underneath on close */ }
+  });
+}
+// whoever is looking settles any dispute whose outcome is clear
+function settleDisputes(code, g) {
+  for (const [id, c] of Object.entries(g.claims)) {
+    const v = verdict(g, c);
+    if (v && !c.decidedAt) B().updateClaim(code, id, { status: v, decidedAt: Date.now() }).catch(() => {});
+  }
+}
+function goHome() { if (S.unwatch) S.unwatch(); S.unwatch = null; S.g = null; S.view = { page: 'home' }; render(); fillGroupNames(); }
+async function fillGroupNames() {
+  for (const c of S.groups) { try { const d = await B().getGroup(c); const el = document.querySelector(`[data-name="${c}"]`); if (el && d) el.textContent = d.name; } catch (e) {} }
+}
+async function joinByCode(raw) {
+  const code = clean(raw, 8).toUpperCase().replace(/[^A-Z0-9]/g, '');
+  if (code.length < 6) return toast('Codes are 6 letters and numbers.');
+  if (S.groups.includes(code)) return openGroup(code);
+  try {
+    const d = await B().getGroup(code);
+    if (!d) return toast('No jar with that code. Check it and try again.');
+    await B().joinGroup(code, { name: S.me.name, color: COLORS[Math.floor(Math.random() * COLORS.length)], joinedAt: Date.now() });
+    S.groups.push(code); saveGroups(); ste('detail', 'jar-joined'); closeSheet(); toast(`You're in ${d.name}! Mind your language.`); openGroup(code);
+  } catch (e) { console.warn(e); toast('Couldn\'t join. Check your internet and try again.'); }
+}
+function newDraft() { return { name: '', stake: 'money', forfeit: '', currency: 'EUR', tiers: DEFAULT_TIERS.map(t => ({ ...t })), jarWay: 'wallet', jarInfo: '', days: 7 }; }
+function readDraftForm() {
+  const f = document.querySelector('form[data-f="create"]'); if (!f) return;
+  const d = S.view.draft;
+  d.name = f.gname?.value ?? d.name; if (f.forfeit) d.forfeit = f.forfeit.value; if (f.jarInfo) d.jarInfo = f.jarInfo.value;
+  d.tiers.forEach((t, i) => { const el = f['amt' + i]; if (el) { const n = parseFloat(String(el.value).replace(',', '.')); if (isFinite(n) && n >= 0) t.amount = Math.round(n * 100) / 100; } });
+}
+async function createGroup() {
+  readDraftForm();
+  const d = S.view.draft, name = clean(d.name, 30);
+  if (!name) return toast('Give your jar a name first.');
+  let code = makeCode();
+  for (let i = 0; i < 4 && await B().getGroup(code); i++) code = makeCode();
+  const now = Date.now();
+  const doc = {
+    name, stake: d.stake, forfeit: d.stake === 'forfeit' ? clean(d.forfeit, 60) : '', currency: d.currency,
+    tiers: d.tiers.map(t => ({ ...t, amount: d.stake === 'money' ? t.amount : 0 })), jarWay: d.stake === 'money' ? d.jarWay : 'none', jarInfo: d.stake === 'money' ? clean(d.jarInfo, 160) : '',
+    round: { no: 1, start: now, end: now + d.days * DAY, days: d.days }, createdBy: S.uid, createdAt: now, history: [],
+  };
+  try {
+    await B().createGroup(code, doc, { name: S.me.name, color: COLORS[0], joinedAt: now });
+    S.groups.push(code); saveGroups(); ste('track', 'play'); ste('detail', 'jar-started-' + d.stake);
+    openGroup(code); setTimeout(inviteSheet, 400);
+  } catch (e) { console.warn(e); toast('Couldn\'t start the jar. Check your internet and try again.'); }
+}
+
+document.addEventListener('submit', async e => {
+  const f = e.target.closest('form[data-f]'); if (!f) return; e.preventDefault();
+  if (f.dataset.f === 'me') {
+    const name = clean(f.name.value, 20); if (!name) return;
+    S.me = { name }; local.set('me', S.me); render(); fillGroupNames(); handleLink();
+  }
+  if (f.dataset.f === 'create') createGroup();
+  if (f.dataset.f === 'mine') {
+    const patch = { name: clean(f.name.value, 20) || S.me.name }; if (f.payLink) patch.payLink = clean(f.payLink.value, 120);
+    await B().updateMember(S.view.code, S.uid, patch).catch(() => {}); toast('Saved.');
+  }
+  if (f.dataset.f === 'join') joinByCode(f.code.value);
+});
+
+document.addEventListener('input', e => {
+  if (e.target.dataset.input === 'q') { S.view.q = e.target.value; const pos = e.target.selectionStart; render(); const i = document.querySelector('[data-input="q"]'); if (i) { i.focus(); i.setSelectionRange(pos, pos); } }
+});
+
+document.addEventListener('click', async e => {
+  const el = e.target.closest('[data-a]'); if (!el) return;
+  const a = el.dataset.a, g = S.g, code = S.view.code;
+  if (a === 'close-sheet') { if (e.target === el || el.tagName === 'BUTTON') { closeSheet(); if (S.view.page === 'group') render(); } return; }
+  if (a === 'go-create') { S.view = { page: 'create', draft: newDraft() }; return render(); }
+  if (a === 'back' || a === 'home') return goHome();
+  if (a === 'open') return openGroup(el.dataset.code);
+  if (a === 'rename') { S.me = null; local.set('me', null); return render(); }
+  if (a === 'join') return sheet(`<h2>Join a jar</h2><form data-f="join"><label class="field"><span>The 6-letter code</span><input class="inp" name="code" maxlength="8" autocapitalize="characters" style="letter-spacing:4px;text-transform:uppercase;font-size:1.3rem" placeholder="K7MP2R" required></label><button class="btn primary wide">Join</button></form><button class="btn ghost wide" data-a="close-sheet" style="margin-top:10px">Cancel</button>`);
+  if (['stake', 'jarway', 'cur', 'days'].includes(a)) {
+    readDraftForm(); const d = S.view.draft;
+    if (a === 'stake') d.stake = el.dataset.v; if (a === 'jarway') d.jarWay = el.dataset.v; if (a === 'cur') d.currency = el.dataset.v; if (a === 'days') d.days = +el.dataset.v;
+    return render();
+  }
+  if (!g) return;
+  if (a === 'tab') { S.view.tab = el.dataset.v; render(); scrollTo(0, 0); return; }
+  if (a === 'invite') return inviteSheet();
+  if (a === 'share-invite') return share(`🤬🫙 Join our swear jar "${g.doc.name}" on PottyMouthPocket. Mind your language! Code ${code}:`, S.inviteLink);
+  if (a === 'copy-invite') { try { await navigator.clipboard.writeText(S.inviteLink); toast('Link copied.'); } catch (err) { toast(S.inviteLink, 8000); } return; }
+  if (a === 'friends') { if (B().addFriends) { B().addFriends(code); toast('Aoife, Dec, Niamh and Gav have joined. Watch your mouth!'); } return; }
+  if (a === 'accuse') return accuseSheet();
+  if (a === 'pick-who') { S.accuse.note = $('#acc-note')?.value || ''; S.accuse.who = el.dataset.uid; return S.accuse.draw(); }
+  if (a === 'pick-tier') { S.accuse.note = $('#acc-note')?.value || ''; S.accuse.tier = el.dataset.v; return S.accuse.draw(); }
+  if (a === 'send-accuse') {
+    const t = tierOf(g, S.accuse.tier), who = S.accuse.who, note = clean($('#acc-note')?.value, 60);
+    el.disabled = true;
+    try {
+      const id = await B().addClaim(code, { accuser: S.uid, accused: who, tier: t.id, amount: t.amount || 0, note, status: 'pending', votes: {}, round: g.doc.round.no, createdAt: Date.now(), paid: false });
+      ste('detail', 'accusation-' + t.id); closeSheet(); render();
+      sheet(`<p class="big-emoji center">📣</p><h2 class="center">${esc(member(who).name)} has been accused!</h2><p class="center muted">They'll see it next time they open the app. Want to give them a nudge?</p>
+        <div class="stack"><button class="btn primary wide" data-a="nudge" data-id="${id}">Nudge them on WhatsApp</button><button class="btn ghost wide" data-a="close-sheet">Done</button></div>`);
+    } catch (err) { console.warn(err); toast('Couldn\'t send that. Check your internet.'); el.disabled = false; }
+    return;
+  }
+  if (a === 'nudge') {
+    const c = g.claims[el.dataset.id] || {}, t = tierOf(g, c.tier);
+    return share(`🤬 ${S.me.name} says you swore (${t.label.toLowerCase()})${c.note ? ' ' + c.note : ''}! Accept or dispute it in "${g.doc.name}":`, APP_URL + '?g=' + code);
+  }
+  const id = el.dataset.id, c = id && g.claims[id];
+  if (a === 'accept' && c) { await B().updateClaim(code, id, { status: 'accepted', respondedAt: Date.now() }); ste('detail', 'accepted'); toast('Fair play for owning it.'); return; }
+  if (a === 'dispute' && c) {
+    await B().updateClaim(code, id, { status: 'disputed', respondedAt: Date.now(), disputed: true, votes: {} }); ste('detail', 'disputed');
+    toast(voters(g, c).length ? 'Disputed. The rest of the group will vote.' : `Disputed. ${member(c.accuser).name} can stand by it or withdraw it.`); return;
+  }
+  if (a === 'vote' && c) { await B().updateClaim(code, id, { ['votes.' + S.uid]: el.dataset.v === '1' }); ste('detail', 'voted'); toast('Vote counted.'); return; }
+  if (a === 'stand' && c) { await B().updateClaim(code, id, { status: 'upheld', decidedAt: Date.now(), stood: true }); toast('It stands. Marked as disputed in the ledger.'); return; }
+  if (a === 'withdraw' && c) { await B().updateClaim(code, id, { status: 'dropped', decidedAt: Date.now(), withdrawn: true }); toast('Withdrawn.'); return; }
+  if (a === 'pay') {
+    const amt = money(+el.dataset.amt, g.doc.currency);
+    try { await navigator.clipboard.writeText((+el.dataset.amt).toFixed(2)); } catch (err) {}
+    const info = g.doc.jarInfo || '';
+    const url = /^(https?:\/\/|revolut\.me|www\.)/i.test(info) ? (/^https?:/i.test(info) ? info : 'https://' + info) : null;
+    ste('detail', 'pay-opened');
+    if (url) { toast(`Amount copied: ${amt}. Paste it in when you pay.`); window.open(url, '_blank'); }
+    else sheet(`<h2>💸 Pay ${amt}</h2><p>${info ? esc(info) : 'Pay it into your group\'s shared wallet.'}</p><p class="muted tiny">The amount is copied, so you can paste it.</p><button class="btn ghost wide" data-a="close-sheet">OK</button>`);
+    return;
+  }
+  if (a === 'paid-all') {
+    const mine = Object.entries(g.claims).filter(([, x]) => x.accused === S.uid && counts(x) && !x.paid && x.round === g.doc.round.no);
+    for (const [cid] of mine) await B().updateClaim(code, cid, { paid: true, paidAt: Date.now() });
+    ste('detail', 'paid'); toast('Marked as paid. Thanks for keeping the jar honest!'); return;
+  }
+  if (a === 'remove') { await B().removeMember(code, el.dataset.uid); return toast('Removed.'); }
+  if (a === 'leave') {
+    if (!confirm(`Leave "${g.doc.name}"? Your swears stay in the ledger.`)) return;
+    await B().removeMember(code, S.uid).catch(() => {}); S.groups = S.groups.filter(x => x !== code); saveGroups(); return goHome();
+  }
+  if (a === 'new-round') {
+    const st = standings(g), now = Date.now(), days = g.doc.round.days;
+    const h = { no: g.doc.round.no, winners: st.winners.map(w => w.name).join(' & '), dirtiest: st.dirtiest && st.dirtiest.swears > st.winners[0].swears ? st.dirtiest.name : '', swears: st.swears, jar: Math.round(st.jar * 100) / 100, end: g.doc.round.end };
+    await B().updateGroup(code, { round: { no: g.doc.round.no + 1, start: now, end: now + days * DAY, days }, history: [...(g.doc.history || []), h].slice(-20) });
+    ste('detail', 'round-finished'); ste('value', 'swears-per-round', st.swears);
+    return toast(`Round ${g.doc.round.no + 1} has started. Clean slate!`);
+  }
+  if (a === 'share-result') return shareResult(g);
+});
+
+/* ---------------- end-of-round picture to share ---------------- */
+async function shareResult(g) {
+  const st = standings(g), W = 1080, H = 1080, cv = document.createElement('canvas'); cv.width = W; cv.height = H;
+  const x = cv.getContext('2d');
+  await document.fonts?.ready;
+  x.fillStyle = '#FFF4E2'; x.fillRect(0, 0, W, H);
+  x.fillStyle = '#2B211C'; x.textAlign = 'center';
+  x.font = '700 64px Fredoka, sans-serif'; x.fillText(g.doc.name, W / 2, 150);
+  x.font = '600 40px Nunito, sans-serif'; x.fillStyle = '#7A6A60'; x.fillText(`Round ${g.doc.round.no} results`, W / 2, 215);
+  x.font = '160px serif'; x.fillText('🏆', W / 2, 430);
+  x.fillStyle = '#2B211C'; x.font = '700 72px Fredoka, sans-serif'; x.fillText(st.winners.map(w => w.name).join(' & '), W / 2, 560);
+  x.font = '600 42px Nunito, sans-serif'; x.fillText(isMoney(g) ? `collects the jar: ${money(st.jar, g.doc.currency)}` : 'cleanest mouth of the round', W / 2, 630);
+  if (st.dirtiest && st.dirtiest.swears > st.winners[0].swears) { x.fillStyle = '#E8513A'; x.font = '700 40px Nunito, sans-serif'; x.fillText(`Dirtiest mouth: ${st.dirtiest.name} (${st.dirtiest.swears} swears)`, W / 2, 740); }
+  x.fillStyle = '#2B211C'; x.font = '600 34px Nunito, sans-serif'; x.fillText(`${st.swears} swears caught this round  #@%&!`, W / 2, 820);
+  x.fillStyle = '#7A6A60'; x.font = '600 30px Nunito, sans-serif'; x.fillText('PottyMouthPocket · thespectrumtechengine.com/potty-mouth', W / 2, 1010);
+  const text = `🏆 ${st.winners.map(w => w.name).join(' & ')} won round ${g.doc.round.no} of "${g.doc.name}" on PottyMouthPocket!`;
+  ste('track', 'share');
+  try {
+    const blob = await new Promise(r => cv.toBlob(r, 'image/png'));
+    const file = new File([blob], 'potty-mouth-result.png', { type: 'image/png' });
+    if (navigator.canShare && navigator.canShare({ files: [file] })) { await navigator.share({ files: [file], text: text + ' ' + APP_URL }); return; }
+  } catch (err) { if (err && err.name === 'AbortError') return; }
+  share(text, APP_URL);
+}
+
+/* ---------------- links: ?join=CODE and ?g=CODE ---------------- */
+function handleLink() {
+  const q = new URLSearchParams(location.search), j = q.get('join'), gc = q.get('g');
+  if (!S.me) return;
+  history.replaceState(null, '', location.pathname);
+  if (j) joinByCode(j);
+  else if (gc && S.groups.includes(gc.toUpperCase())) openGroup(gc.toUpperCase());
+}
+
+/* ---------------- start ---------------- */
+async function boot() {
+  render();
+  try { S.backend = (FIREBASE_CONFIG && (LIVE_HOST || local.get('force-live', false))) ? await firebaseBackend() : practiceBackend(); }
+  catch (e) { console.warn('Live connection failed, using a practice copy', e); S.backend = practiceBackend(); toast('Couldn\'t connect. This is a practice copy for now.'); }
+  S.uid = await B().start();
+  render(); fillGroupNames(); handleLink();
+  // keep countdowns ticking, and let pretend friends react in a practice copy
+  setInterval(() => {
+    if (S.view.page !== 'group' || !S.g) return;
+    if (B().tickBots) B().tickBots(S.view.code);
+    const cd = document.querySelector('[data-countdown]'); if (cd) cd.textContent = Date.now() >= S.g.doc.round.end ? 'Round over' : timeLeft(S.g.doc.round.end - Date.now());
+    if (Date.now() >= S.g.doc.round.end && !document.querySelector('[data-a="new-round"]') && !$('#sheet-root').innerHTML) render();
+  }, 1500);
+}
+boot();
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
+</script>
+</body>
+</html>

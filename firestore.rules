@@ -1,0 +1,60 @@
+rules_version = '2';
+// PottyMouthPocket: who can read and change what.
+// Only people in a jar can see its people and swears. Anyone with the code can see the jar's name, so they can join it.
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() { return request.auth != null; }
+    function me() { return request.auth.uid; }
+    function inGroup(code) { return exists(/databases/$(database)/documents/groups/$(code)/members/$(me())); }
+    function group(code) { return get(/databases/$(database)/documents/groups/$(code)).data; }
+    function only(keys) { return request.resource.data.diff(resource.data).affectedKeys().hasOnly(keys); }
+
+    match /groups/{code} {
+      allow get: if signedIn();
+      allow list: if false;
+      allow create: if signedIn() && code.size() == 6
+        && request.resource.data.createdBy == me()
+        && request.resource.data.name is string && request.resource.data.name.size() <= 30;
+      // members can start the next round (round + history) and nothing else; the starter can't be changed
+      allow update: if signedIn() && inGroup(code) && only(['round', 'history']);
+      allow delete: if false;
+
+      match /members/{uid} {
+        allow read: if signedIn() && inGroup(code);
+        allow create: if signedIn() && uid == me() && exists(/databases/$(database)/documents/groups/$(code))
+          && request.resource.data.name is string && request.resource.data.name.size() <= 20;
+        allow update: if signedIn() && uid == me() && only(['name', 'payLink', 'color'])
+          && request.resource.data.name.size() <= 20;
+        // you can leave; the person who started the jar can remove people
+        allow delete: if signedIn() && (uid == me() || group(code).createdBy == me());
+      }
+
+      match /claims/{id} {
+        allow read: if signedIn() && inGroup(code);
+        allow create: if signedIn() && inGroup(code)
+          && request.resource.data.accuser == me() && request.resource.data.accused != me()
+          && request.resource.data.status == 'pending' && request.resource.data.paid == false
+          && request.resource.data.note.size() <= 60;
+        allow update: if signedIn() && inGroup(code) && (
+          // the accused accepts or disputes
+          (resource.data.accused == me() && resource.data.status == 'pending'
+            && request.resource.data.status in ['accepted', 'disputed'] && only(['status', 'respondedAt', 'disputed', 'votes']))
+          // the accused marks it paid
+          || (resource.data.accused == me() && only(['paid', 'paidAt']) && request.resource.data.paid == true)
+          // anyone else (not the accused or accuser) casts their own vote
+          || (resource.data.status == 'disputed' && resource.data.accused != me() && resource.data.accuser != me()
+            && only(['votes']) && request.resource.data.votes.diff(resource.data.get('votes', {})).affectedKeys().hasOnly([me()]))
+          // the accuser stands by it or withdraws it
+          || (resource.data.accuser == me() && resource.data.status == 'disputed'
+            && request.resource.data.status in ['upheld', 'dropped'] && only(['status', 'decidedAt', 'stood', 'withdrawn']))
+          // once the votes are in, anyone in the jar can record the result
+          || (resource.data.status == 'disputed' && request.resource.data.status in ['upheld', 'dropped'] && only(['status', 'decidedAt']))
+        );
+        allow delete: if false;
+      }
+    }
+
+    // keep the owner's numbers and anything else locked away
+    match /{document=**} { allow read, write: if false; }
+  }
+}
