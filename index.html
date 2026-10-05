@@ -256,6 +256,7 @@ function practiceBackend() {
       }
       if (changed) save();
     },
+    async forgetMe() { local.set('practice-uid', null); },
     resetPractice() { localStorage.removeItem(KEY); db = load(); save(); },
   };
   addEventListener('storage', e => { if (e.key === KEY) { db = load(); subs.forEach(f => f()); } });
@@ -282,6 +283,7 @@ async function firebaseBackend() {
     removeMember: (c, u) => deleteDoc(doc(db, 'groups', c, 'members', u)),
     async addClaim(c, claim) { const r = await addDoc(collection(db, 'groups', c, 'claims'), claim); return r.id; },
     updateClaim: (c, id, patch) => updateDoc(doc(db, 'groups', c, 'claims', id), patch),
+    async forgetMe() { try { await auth.currentUser.delete(); } catch (e) { await authM.signOut(auth).catch(() => {}); } },
     watch(c, cb) {
       const st = { doc: null, members: {}, claims: {} }, got = new Set(), fire = (k) => { got.add(k); if (st.doc && got.size === 3) cb({ ...st }); }; // wait until all three have loaded once
       const offs = [
@@ -382,6 +384,7 @@ function homeHTML() {
     <b>How it works</b>
     <p>1. Someone swears. 2. Whoever heard it accuses them in the app. 3. They accept, or dispute and the group votes. 4. When the round ends, the cleanest mouth wins.</p>
     <p>Privacy: your groups only show names and swear counts to the people in them. To help improve the app, it counts a few anonymous things, like how many jars are started. Questions: <a href="mailto:privacy@thespectrumtechengine.com">privacy@thespectrumtechengine.com</a>. Need help or found a bug? <a href="mailto:support@thespectrumtechengine.com">support@thespectrumtechengine.com</a></p>
+    <p><a href="privacy.html">Privacy policy</a> · <a href="#" data-a="forget">Delete my details</a></p>
   </div>${logo}`;
 }
 
@@ -654,6 +657,16 @@ document.addEventListener('click', async e => {
   if (a === 'go-create') { S.view = { page: 'create', draft: newDraft() }; return render(); }
   if (a === 'back' || a === 'home') return goHome();
   if (a === 'open') return openGroup(el.dataset.code);
+  if (a === 'forget') {
+    e.preventDefault();
+    if (!confirm('Delete your details? You will leave every jar on this phone, your name is removed from them, and this phone forgets you. Swears already in the ledger stay, but show as "Someone".')) return;
+    for (const c of S.groups) await B().removeMember(c, S.uid).catch(() => {});
+    await B().forgetMe?.().catch(() => {});
+    ste('detail', 'deleted-details');
+    for (const k of ['me', 'groups']) try { localStorage.removeItem('pmp-' + k); } catch (err) {}
+    S.me = null; S.groups = []; render(); toast('Your details have been deleted.');
+    setTimeout(() => location.reload(), 1500); return;
+  }
   if (a === 'rename') { S.me = null; local.set('me', null); return render(); }
   if (a === 'join') return sheet(`<h2>Join a jar</h2><form data-f="join"><label class="field"><span>The 6-letter code</span><input class="inp" name="code" maxlength="8" autocapitalize="characters" style="letter-spacing:4px;text-transform:uppercase;font-size:1.3rem" placeholder="K7MP2R" required></label><button class="btn primary wide">Join</button></form><button class="btn ghost wide" data-a="close-sheet" style="margin-top:10px">Cancel</button>`);
   if (['stake', 'jarway', 'cur', 'days'].includes(a)) {

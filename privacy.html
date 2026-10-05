@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en-IE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PottyMouthPocket Privacy</title>
+<meta name="description" content="What PottyMouthPocket stores, who can see it, and how to have it removed.">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<style>
+:root { --bg: #FFF4E2; --card: #FFFFFF; --ink: #2B211C; --muted: #7A6A60; --line: #EEDFC9; --accent: #C8402B; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg: #1C1714; --card: #2A221D; --ink: #F6ECE3; --muted: #BFAE9F; --line: #3D322B; --accent: #FF8A75; } }
+:root[data-theme="dark"] { --bg: #1C1714; --card: #2A221D; --ink: #F6ECE3; --muted: #BFAE9F; --line: #3D322B; --accent: #FF8A75; }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 17px/1.6 system-ui, -apple-system, "Segoe UI", sans-serif; }
+main { width: min(100%, 44rem); margin: 0 auto; padding: 28px 16px 48px; }
+h1 { font-size: 1.8rem; line-height: 1.2; margin: 12px 0 4px; }
+h2 { font-size: 1.15rem; margin: 28px 0 6px; }
+p, li { margin: 6px 0; }
+.muted { color: var(--muted); }
+a { color: var(--accent); }
+.top { display: flex; align-items: center; gap: 12px; }
+.top img { width: 56px; height: 56px; border-radius: 14px; }
+</style>
+</head>
+<body>
+<main>
+  <div class="top"><img src="icon-192.png" alt=""><a href="./">← Back to PottyMouthPocket</a></div>
+  <h1>Privacy policy</h1>
+  <p class="muted">PottyMouthPocket, by The Spectrum Tech Engine. Last updated 5 October 2026.</p>
+
+  <h2>The short version</h2>
+  <p>PottyMouthPocket keeps score for your swear jar. You don't need an email address or password, and the app never takes, holds or sends money. Only the people in your jar can see what happens in it.</p>
+
+  <h2>What we store</h2>
+  <ul>
+    <li><b>Your name</b> as you type it (it can be a nickname), and a random ID your phone is given so the app knows it's you. The ID isn't linked to your email, phone number or Google account.</li>
+    <li><b>Your jars:</b> each jar's name, what's at stake, its prices and round dates, and who is in it.</li>
+    <li><b>The swears:</b> who accused who, how bad it was, the optional "where or when" note, whether it was accepted or disputed, the votes, and whether it was marked as paid.</li>
+    <li><b>An optional payment link</b> (for example a revolut.me link), if you choose to add one, so people can settle up with you. We never see or handle the payments themselves.</li>
+  </ul>
+  <p>This is stored with Google Firebase (Cloud Firestore) in the European Union.</p>
+
+  <h2>Who can see it</h2>
+  <p>Only people who have joined a jar can see its members and swears. Anyone with a jar's 6-letter code can see the jar's name, so they can join it. We don't sell or share your information with anyone, and there are no adverts.</p>
+
+  <h2>Anonymous usage counts</h2>
+  <p>To help improve the app, it counts a few anonymous things, such as how many jars are started, how many swears are accused, and which features are used. These counts can't be traced back to you and don't include names or what anyone said.</p>
+
+  <h2>On your device</h2>
+  <p>The app remembers your name and which jars you are in on your device, so you don't have to type them each time.</p>
+
+  <h2>Removing your information</h2>
+  <ul>
+    <li><b>Leave a jar:</b> open the jar, go to <b>Group</b>, and tap <b>Leave this jar</b>. The person who started a jar can also remove people.</li>
+    <li><b>Delete your details:</b> on the app's home screen, tap <b>Delete my details</b>. You leave every jar, your name is removed, and your phone forgets you. Swears already in a jar's ledger stay, but show as "Someone".</li>
+    <li><b>Or ask us:</b> email <a href="mailto:privacy@thespectrumtechengine.com">privacy@thespectrumtechengine.com</a> with your name and your jar's code, and we'll delete your details and swears within 30 days.</li>
+  </ul>
+
+  <h2>Age</h2>
+  <p>PottyMouthPocket is meant for people aged 13 and over. If a jar uses money, that's something adults arrange between themselves, outside the app.</p>
+
+  <h2>Contact</h2>
+  <p>Privacy questions: <a href="mailto:privacy@thespectrumtechengine.com">privacy@thespectrumtechengine.com</a><br>
+     Help or found a bug: <a href="mailto:support@thespectrumtechengine.com">support@thespectrumtechengine.com</a></p>
+  <p class="muted">If we change this policy, we'll update the date at the top of this page.</p>
+</main>
+</body>
+</html>
