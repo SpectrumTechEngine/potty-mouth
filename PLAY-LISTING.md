@@ -44,7 +44,7 @@ Made in Ireland by The Spectrum Tech Engine.
 
 ## Graphics
 - **App icon** 512x512: icon-512.png
-- **Feature graphic** 1024x500: still to make (I can make one from share.jpg)
+- **Feature graphic** 1024x500: play-feature-graphic.png
 - **Phone screenshots** (2 to 8): take on the phone, or I can make them from the live app
 
 ## Content rating questionnaire (IARC)
